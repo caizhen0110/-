@@ -1,0 +1,62 @@
+Organization：
+
+    { 
+        "resourceType": "Organization",
+        "name": "MI科技健康診療紀錄所"
+    }
+
+
+--> {
+        "resourceType": "Organization",
+        "id": "44767420",
+        "meta": {
+            "versionId": "1",
+            "lastUpdated": "2024-06-23T16:09:57.516+00:00",
+            "source": "#3DeiWMpxl9V45akZ"
+        },
+        "name": "MI科技健康診療紀錄所"
+    }
+
+Organization Get Link: https://hapi.fhir.org/baseR4/Organization/44767420
+        
+Patient：
+
+    { 
+        "resourceType": "Patient",
+        "name": [ {
+            "use": "official",
+            "text": "唐蝴蘆"  } ],
+        "gender": "female",
+        "birthDate": "2002-04-09",
+        "managingOrganization": {
+            "reference": "Organization/44767420"  }
+    }
+
+
+--> {
+        "resourceType": "Patient",
+        "id": "44767421",
+        "meta": {
+            "versionId": "1",
+            "lastUpdated": "2024-06-23T16:10:30.158+00:00",
+            "source": "#e2QFTaE7dyk95Hpy"
+        },
+        "text": {
+            "status": "generated",
+            "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><div class=\"hapiHeaderText\"></div><table class=\"hapiPropertyTable\"><tbody><tr><td>Date of birth</td><td><span>09 April 2002</span></td></tr></tbody></table></div>"
+        },
+        "name": [ {
+            "use": "official",
+            "text": "唐蝴蘆"
+        } ],
+        "gender": "female",
+        "birthDate": "2002-04-09",
+        "managingOrganization": {
+            "reference": "Organization/44767420"
+        }
+    }   
+    
+Patient Get Link: https://hapi.fhir.org/baseR4/Patient?_id=44767421
+
+
+

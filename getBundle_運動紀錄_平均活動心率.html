@@ -1,0 +1,82 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title> Get 運動紀錄-平均活動心率紀錄</title>
+    <script src="setting.js"></script>
+    <script src="HTTP2024.js"></script>
+</head>
+
+<body>
+    <div id="Title">Get Bundle</div>
+    <p></p>
+    <label>PatientID：</label><input id="PatientID" type="text" value="44767421" />
+    <br>
+    <label>SearchCode：</label><input id="SearchCode" type="text" value="55425-3" />
+    <p></p>
+    <input id="Button2" onclick="getData()" type="button" value="Get data" />
+    <p></p>
+    <div id="observations"></div>
+    <script>
+        function getData() {
+            const apiURL = "https://hapi.fhir.org/baseR4/Observation?code=" + document.getElementById("SearchCode").value + "&subject=Patient/" + document.getElementById("PatientID").value;
+            sendHttpGet(apiURL, callBack);
+        }
+
+        function callBack(ret) {
+            document.getElementById("observations").textContent = "";
+            const bundle = JSON.parse(ret);
+            const div = document.getElementById('observations');
+            if (bundle.resourceType === "Bundle") {
+                const entryCount = bundle.entry.length;
+                for (let i = 0; i < entryCount; i++) {
+                    const resource = bundle.entry[i].resource;
+                    const id = resource.id;
+                    const measurementTime = resource.effectiveDateTime;
+                    const performer = resource.performer ? resource.performer[0].display : "Unknown";
+                    const heartRate = resource.valueQuantity ? resource.valueQuantity.value : "Unknown";
+
+                    const table = document.createElement('table');
+                    const row0 = table.insertRow();
+                    const cell0 = row0.insertCell();
+                    cell0.innerHTML = "<b>序號：</b> " + (i + 1);
+                    const row1 = table.insertRow();
+                    const cell1 = row1.insertCell();
+                    cell1.innerHTML = "<b>Resource ID：</b> " + id;
+                    const row2 = table.insertRow();
+                    const cell2 = row2.insertCell();
+                    cell2.innerHTML = "<b>Time：</b> " + measurementTime;
+                    const row3 = table.insertRow();
+                    const cell3 = row3.insertCell();
+                    cell3.innerHTML = "<b>Performer：</b> " + performer;
+                    const row4 = table.insertRow();
+                    const cell4 = row4.insertCell();
+                    cell4.innerHTML = "<b>Heart Rate：</b> " + heartRate + " beats per minute";
+
+                    div.appendChild(table);
+                    div.appendChild(document.createElement('br'));
+                }
+            }
+        }
+
+        function sendHttpGet(url, callback) {
+            const xhr = new XMLHttpRequest();
+            xhr.open("GET", url, true);
+            xhr.setRequestHeader("Content-Type", "application/fhir+json");
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        callback(xhr.responseText);
+                    } else {
+                        document.getElementById("observations").innerHTML = "提交失敗: " + xhr.responseText;
+                    }
+                }
+            };
+            xhr.send();
+        }
+    </script>
+
+</body>
+
+</html>

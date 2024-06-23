@@ -1,0 +1,160 @@
+﻿﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Post 運動紀錄-平均活動心率紀錄</title>
+
+    <script src="setting.js"></script>
+    <script src="Cookie.js"></script>
+    <script src="dateTime.js"></script>
+    <script src="HTTP2024.js"></script>
+
+    <script>
+        var jsonObj = {
+            "resourceType": "Observation",
+            "status": "final",
+            "category": [
+                {
+                    "coding": [
+                        {
+                            "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                            "code": "activity"
+                        }
+                    ]
+                },
+                {
+                    "coding": [
+                        {
+                            "system": "http://hl7.org/fhir/us/physical-activity/CodeSystem/pa-temporary-codes",
+                            "code": "PhysicalActivity"
+                        }
+                    ]
+                }
+            ],
+            "code": {
+                "coding": [
+                    {
+                        "system": "http://loinc.org",
+                        "code": "55425-3",
+                        "display": "Heart rate unspecified time mean by Pedometer"
+                    }
+                ]
+            },
+            "subject": {
+                "reference": "",
+                "display": ""
+            },
+            "effectiveDateTime": getFormattedTime(),
+            "performer": [
+                {
+                    "reference": "",
+                    "display": ""
+                }
+            ],
+            "valueQuantity": {
+                "value": 0,
+                "unit": "beats per minute",
+                "system": "http://unitsofmeasure.org",
+                "code": "/min"
+            }
+        };
+
+        function validateInput() {
+            var patientID = document.getElementById("patientID").value;
+            var activityName = document.getElementById("activityName").value;
+            var performerID = document.getElementById("performerID").value;
+            var relationship = document.getElementById("relationship").value;
+            var heartRate = document.getElementById("heartRate").value;
+
+            if (!patientID || !activityName || !performerID || !relationship || !heartRate) {
+                document.getElementById("errormsg").innerHTML = "所有欄位都必須填寫";
+                return false;
+            }
+
+            if (isNaN(patientID)) {
+                document.getElementById("errormsg").innerHTML = "被紀錄者ID必須是數字";
+                return false;
+            }
+
+            if (isNaN(heartRate) || heartRate <= 0) {
+                document.getElementById("errormsg").innerHTML = "心率必須是正數";
+                return false;
+            }
+
+            return true;
+        }
+
+        function postData() {
+            if (!validateInput()) {
+                return;
+            }
+
+            document.getElementById("errormsg").innerHTML = "";
+
+            jsonObj.subject.reference = "Patient/" + parseInt(document.getElementById("patientID").value);
+            jsonObj.subject.display = document.getElementById("activityName").value;
+            jsonObj.performer[0].reference = "Patient/" + document.getElementById("performerID").value;
+            jsonObj.performer[0].display = document.getElementById("relationship").value;
+            jsonObj.valueQuantity.value = parseInt(document.getElementById("heartRate").value);
+            jsonObj.effectiveDateTime = getFormattedTime();
+
+            var jsonStr = JSON.stringify(jsonObj);
+            var apiURL = "https://hapi.fhir.org/baseR4/Observation";
+            sendHttpPost(apiURL, jsonStr, callBack);
+        }
+
+        function callBack(ret) {
+            console.log(ret);
+            document.getElementById("errormsg").innerHTML = "成功登入一筆";
+            document.getElementById("patientID").value = "";
+            document.getElementById("activityName").value = "";
+            document.getElementById("performerID").value = "";
+            document.getElementById("relationship").value = "";
+            document.getElementById("heartRate").value = "";
+        }
+
+        function sendHttpPost(url, data, callback) {
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", url, true);
+            xhr.setRequestHeader("Content-Type", "application/fhir+json");
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 201) {
+                        callback(xhr.responseText);
+                    } else {
+                        document.getElementById("errormsg").innerHTML = "提交失敗: " + xhr.responseText;
+                    }
+                }
+            };
+            xhr.send(data);
+        }
+    </script>
+
+</head>
+
+<body style="height: 780px">
+
+    <p>請輸入被紀錄者ID</p>
+    活動者ID: <input type="text" id="patientID" value="44767421" /> <br />
+
+    <p>請輸入活動者名字</p>
+    活動者名字: <input type="text" id="activityName" value="唐蝴蘆" /> <br />
+
+    <p>請輸入紀錄者ID</p>
+    紀錄者ID: <input type="text" id="performerID" /> <br />
+
+    <p>請輸入與被紀錄者之關係</p>
+    關係: <input type="text" id="relationship" /> <br />
+
+    <p>請輸入心率（每分鐘幾下）</p>
+    心率: <input type="number" id="heartRate" min="0"/> <br />
+
+    <br/>
+    <input id="Button1" onclick="postData()" type="button" value="postData" /><br />
+    <a id="errormsg" style="color: red;"></a>
+
+
+</body>
+
+</html>
