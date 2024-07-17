@@ -1,0 +1,61 @@
+Organization：
+
+    { 
+        "resourceType": "Organization",
+        "name": "2024_MI科技健康診療紀錄所"
+    }
+
+
+
+-->    { 
+ 	 "resourceType": "Organization",
+	  "id": "6505",
+ 	 "meta": {
+	    "versionId": "1",
+ 	   "lastUpdated": "2024-07-17T15:44:42.145+08:00"
+ 	 },
+ 	 "name": "2024_MI科技健康診療紀錄所"
+    }
+
+Organization Get Link: https://fhir.tcumi.com:58443/r5/fhir/Organization/6505
+        
+Patient：
+
+    { 
+        "resourceType": "Patient",
+        "name": [ {
+            "use": "official",
+            "text": "唐蝴蘆"  } ],
+        "gender": "female",
+        "birthDate": "2002-04-09",
+        "managingOrganization": {
+            "reference": "Organization/6505"  }
+    }
+
+
+--> {
+ 	 "resourceType": "Patient",
+ 	 "id": "6506",
+	  "meta": {
+	    "versionId": "1",
+ 	   "lastUpdated": "2024-07-17T15:47:30.363+08:00"
+	  },
+	  "text": {
+ 	   "status": "generated",
+ 	   "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><div class=\"hapiHeaderText\"/><table class=\"hapiPropertyTable\"><tbody><tr><td>Date of birth</td><td><span>09 April 2002</span></td></tr></tbody></table></div>"
+ 	 },
+ 	 "name": [ {
+  	  "use": "official",
+   	 "text": "唐蝴蘆"
+ 	 } ],
+ 	 "gender": "female",
+ 	 "birthDate": "2002-04-09",
+ 	 "managingOrganization": {
+ 	   "reference": "Organization/6505"
+ 	 }
+    }   
+    
+Patient Get Link: https://fhir.tcumi.com:58443/r5/fhir/Patient?_id=6506
+
+
+

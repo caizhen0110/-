@@ -11,7 +11,7 @@
 <body>
     <div id="Title">Get Bundle</div>
     <p></p>
-    <label>PatientID：</label><input id="PatientID" type="text" value="44767421" />
+    <label>PatientID：</label><input id="PatientID" type="text" value="6506" />
     <br>
     <label>SearchCode：</label><input id="SearchCode" type="text" value="55425-3" />
     <p></p>
@@ -20,7 +20,7 @@
     <div id="observations"></div>
     <script>
         function getData() {
-            const apiURL = "https://hapi.fhir.org/baseR4/Observation?code=" + document.getElementById("SearchCode").value + "&subject=Patient/" + document.getElementById("PatientID").value;
+            const apiURL = FHIRrootURL+"Observation?code=" + document.getElementById("SearchCode").value + "&subject=Patient/" + document.getElementById("PatientID").value;
             sendHttpGet(apiURL, callBack);
         }
 

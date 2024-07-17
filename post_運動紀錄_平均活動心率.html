@@ -100,7 +100,7 @@
             jsonObj.effectiveDateTime = getFormattedTime();
 
             var jsonStr = JSON.stringify(jsonObj);
-            var apiURL = "https://hapi.fhir.org/baseR4/Observation";
+            var apiURL = FHIRrootURL+"Observation";
             sendHttpPost(apiURL, jsonStr, callBack);
         }
 
@@ -136,7 +136,7 @@
 <body style="height: 780px">
 
     <p>請輸入被紀錄者ID</p>
-    活動者ID: <input type="text" id="patientID" value="44767421" /> <br />
+    活動者ID: <input type="text" id="patientID" value="6506" /> <br />
 
     <p>請輸入活動者名字</p>
     活動者名字: <input type="text" id="activityName" value="唐蝴蘆" /> <br />
